@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ПОСОБИЕ ПО ТЕХНИЧЕСКОМУ ОБСЛУЖИВАНИЮ СЕТЕВОГО ОБОРУДОВАНИЯ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('wallpaper.png');
+            background-size: cover;
+            background-attachment: fixed;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            width: 90%;
+            max-width: 1600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(128, 0, 128, 0.7);
+        }
+        h1, h2, h3 {
+            text-align: center;
+            color: #9370db; /* Фиолетовый */
+            text-shadow: 0 0 10px rgba(128, 0, 128, 0.7);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-top: 30px;
+            border-bottom: 2px solid #9370db;
+            padding-bottom: 10px;
+        }
+        h3 {
+            font-size: 1.4em;
+            margin-top: 20px;
+            color: #dda0dd; /* Светло-фиолетовый */
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(128, 0, 128, 0.5);
+        }
+        .checklist label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+        .checklist label:hover {
+            color: #dda0dd;
+        }
+        .checklist input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: #9370db;
+        }
+        .ip-table, .monitoring-thresholds-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .ip-table th, .ip-table td,
+        .monitoring-thresholds-table th, .monitoring-thresholds-table td {
+            border: 1px solid #6a0dad; /* Темно-фиолетовый */
+            padding: 10px;
+            text-align: left;
+        }
+        .ip-table th, .monitoring-thresholds-table th {
+            background-color: rgba(128, 0, 128, 0.5);
+            color: #ffffff;
+        }
+        .ip-table tr:nth-child(even),
+        .monitoring-thresholds-table tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        .network-map {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .network-map img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #9370db;
+            border-radius: 5px;
+        }
+        #search-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #searchInput {
+            width: 70%;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border: 1px solid #6a0dad;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: #e0e0e0;
+            font-size: 1.1em;
+        }
+        #searchInput:focus {
+            outline: none;
+            border-color: #dda0dd;
+            box-shadow: 0 0 10px rgba(128, 0, 128, 0.7);
+        }
+        .highlight {
+            background-color: yellow !important;
+            color: black !important;
+            font-weight: bold;
+        }
+        #admin-section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            border: 1px solid rgba(128, 0, 128, 0.5);
+        }
+        #admin-section h2 {
+            color: #dda0dd;
+            border-bottom: 2px solid #dda0dd;
+        }
+        #admin-entry {
+            margin-bottom: 15px;
+        }
+        #adminName {
+            width: calc(50% - 10px);
+            padding: 10px;
+            margin-right: 5px;
+            border-radius: 5px;
+            border: 1px solid #6a0dad;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: #e0e0e0;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #9370db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #6a0dad;
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        #log-entries {
+            margin-top: 20px;
+            border-top: 1px solid rgba(128, 0, 128, 0.5);
+            padding-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 3px solid #9370db;
+        }
+        .log-entry p {
+            margin: 0 0 5px 0;
+            font-size: 0.95em;
+        }
+        .log-entry p strong {
+            color: #dda0dd;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            width: 100%;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+        .task-category {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            border: 1px solid rgba(128, 0, 128, 0.5);
+        }
+        .task-category h4 {
+            margin-top: 0;
+            color: #dda0dd;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+        .tasks {
+            display: none; /* Скрыто по умолчанию */
+        }
+        .tasks.visible {
+            display: block;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 5px;
+        }
+        .task-item label {
+            flex-grow: 1;
+            margin-right: 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .task_description {
+            font-size: 0.9em;
+            color: #ccc;
+            margin-left: 15px;
+        }
+        .task-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .task-actions input[type="checkbox"] {
+            transform: scale(1.3);
+            accent-color: #9370db;
+        }
+        .task-actions button {
+            padding: 5px 10px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ПОСОБИЕ ПО ТЕХНИЧЕСКОМУ ОБСЛУЖИВАНИЮ СЕТЕВОГО ОБОРУДОВАНИЯ</h1>
+        <p style="text-align: center; font-size: 1.1em;">ООО "ЭРКАФАРМ Нева" Аптека "Озерки"</p>
+
+        <div id="search-container">
+            <input type="text" id="searchInput" placeholder="Поиск по ключевым словам...">
+        </div>
+
+        <div class="section" id="regulation-overview">
+            <h2>1. Цель</h2>
+            <p>Регламент устанавливает порядок проведения плановых и внеплановых работ по техническому обслуживанию сетевого оборудования (маршрутизаторы, коммутаторы) с целью обеспечения его бесперебойного функционирования, повышения надежности, безопасности и производительности сети предприятия ООО "ЭРКАФАРМ Нева" Аптека "Озерки".</p>
+        </div>
+
+        <div class="section" id="scope">
+            <h2>2. Область применения</h2>
+            <p>Данный регламент распространяется на следующее сетевое оборудование:</p>
+            <ul>
+                <li>Маршрутизатор: D-link DIR-825/R5</li>
+                <li>Коммутаторы: Cisco Catalyst 4500X Series, Cisco Catalyst 2960 Plus Series</li>
+            </ul>
+        </div>
+
+        <div class="section" id="responsibles">
+            <h2>3. Ответственные лица</h2>
+            <ul>
+                <li>Ответственный за выполнение работ: Администратор сети.</li>
+                <li>Ответственный за контроль: Главный инженер.</li>
+            </ul>
+        </div>
+
+        <div class="section" id="planned-maintenance">
+            <h2>4. Плановое техническое обслуживание</h2>
+
+            <div id="router-dlink" class="task-category">
+                <h4>D-link DIR-825/R5</h4>
+                <div class="tasks">
+                    <div class="task-item">
+                        <label for="daily-router-visual-inspection">
+                            Ежедневно: Визуальный осмотр индикаторов (WAN, Wi-Fi, DHCP)
+                            <span class="task_description">Проверка статусов питания, активности портов, индикаторов ошибок, качества соединения; статус DHCP-сервера.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежедневно: Визуальный осмотр индикаторов (D-Link)', 'daily-router-visual-inspection', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="weekly-router-logs">
+                            Еженедельно: Проверка логов (Syslog, Event Logs)
+                            <span class="task_description">Анализ на наличие ошибок VPN, NAT, маршрутизации; подозрительной активности; предупреждений; сообщений о сбоях портов (err-disabled); активности по доступным из Интернета портам.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Еженедельно: Проверка логов (D-Link)', 'weekly-router-logs', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="monthly-router-firmware">
+                            Ежемесячно: Проверка наличия обновлений прошивки (Firmware/IOS)
+                            <span class="task_description">Анализ бюллетеней безопасности, рекомендаций производителя; сайтов D-link; версий прошивок, признанных проблемными.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежемесячно: Проверка обновлений прошивки (D-Link)', 'monthly-router-firmware', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="monthly-router-utilization">
+                            Ежемесячно: Анализ загрузки процессора (CPU) и памяти (Memory)
+                            <span class="task_description">Отслеживание аномальных всплесков, тенденций, оценка производительности.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежемесячно: Анализ загрузки CPU/Memory (D-Link)', 'monthly-router-utilization', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="monthly-router-cleaning">
+                            Ежемесячно: Очистка корпуса от пыли (при необходимости)
+                            <span class="task_description">Продувка вентиляционных отверстий, проверка чистоты фильтров.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежемесячно: Очистка корпуса от пыли (D-Link)', 'monthly-router-cleaning', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="quarterly-router-cables">
+                            Ежеквартально: Проверка физического состояния кабелей и соединений
+                            <span class="task_description">Визуальный осмотр на предмет повреждений, надежности креплений, состояния коннекторов, патч-панелей.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежеквартально: Проверка кабелей и соединений (D-Link)', 'quarterly-router-cables', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="quarterly-router-traffic">
+                            Ежеквартально: Анализ статистики трафика
+                            <span class="task_description">Выявление узких мест, аномальных пиков, роста ошибок на ключевых интерфейсах (uplinks, серверные порты), оценка использования пропускной способности.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежеквартально: Анализ статистики трафика (D-Link)', 'quarterly-router-traffic', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="annual-router-full-check">
+                            Ежегодно: Полная проверка работоспособности всех функций
+                            <span class="task_description">Тестирование всех основных функций, проверка стабильности работы, отсутствие сообщений об ошибках в логах.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежегодно: Полная проверка работоспособности (D-Link)', 'annual-router-full-check', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="annual-router-security-audit">
+                            Ежегодно: Аудит безопасности настроек
+                            <span class="task_description">Проверка настроек Firewall, правил NAT, DNS-прокси; удаленного управления (Telnet/SSH/Web-интерфейс).</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежегодно: Аудит безопасности настроек (D-Link)', 'annual-router-security-audit', this)">Отметить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="switch-cisco-4500x" class="task-category">
+                <h4>Cisco Catalyst 4500X Series</h4>
+                <div class="tasks">
+                    <div class="task-item">
+                        <label for="daily-4500x-monitoring">
+                            Ежедневно: Мониторинг состояния модулей и портов
+                            <span class="task_description">Мониторинг состояния модулей (Supersvisory Engine, Line Cards); проверка статуса портов (uplinks, серверы, маршрутизаторы); отслеживание нагрузки на CPU/Memory.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежедневно: Мониторинг модулей/портов (Cisco 4500X)', 'daily-4500x-monitoring', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="weekly-4500x-logs">
+                            Еженедельно: Проверка логов
+                            <span class="task_description">Сообщения о STP, EtherChannel, VTP; ошибки CRC, packet drops на транковых портах.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Еженедельно: Проверка логов (Cisco 4500X)', 'weekly-4500x-logs', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="monthly-4500x-backup">
+                            Ежемесячно: Резервное копирование конфигурации
+                            <span class="task_description">Сохранение running-config и startup-config; проверка актуальности TFTP/SFTP сервера.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежемесячно: Резервное копирование конфигурации (Cisco 4500X)', 'monthly-4500x-backup', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="monthly-4500x-utilization">
+                            Ежемесячно: Анализ загрузки процессора (CPU) и памяти (Memory)
+                            <span class="task_description">Отслеживание аномальных всплесков, тенденций, оценка производительности.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежемесячно: Анализ загрузки CPU/Memory (Cisco 4500X)', 'monthly-4500x-utilization', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="monthly-4500x-cleaning">
+                            Ежемесячно: Очистка корпуса от пыли (при необходимости)
+                            <span class="task_description">Продувка вентиляционных отверстий, проверка чистоты фильтров.</span>
+                        </label>
+                        <div class="task-actions">
+                             <button onclick="logTask('Ежемесячно: Очистка корпуса от пыли (Cisco 4500X)', 'monthly-4500x-cleaning', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="quarterly-4500x-traffic">
+                            Ежеквартально: Анализ статистики трафика
+                            <span class="task_description">Анализ статистики на Uplinks, портах серверов, транковых портах; использование show interface с опциями counters и history.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежеквартально: Анализ статистики трафика (Cisco 4500X)', 'quarterly-4500x-traffic', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="annual-4500x-full-check">
+                            Ежегодно: Полная проверка работоспособности всех функций
+                            <span class="task_description">Тестирование всех основных функций, проверка стабильности работы, отсутствие сообщений об ошибках в логах.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежегодно: Полная проверка работоспособности (Cisco 4500X)', 'annual-4500x-full-check', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="annual-4500x-security-audit">
+                            Ежегодно: Аудит безопасности настроек
+                            <span class="task_description">Проверка ACL (L3), Port Security, SNMP (community strings, version), удаленного доступа (SSH), AAA, STP.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежегодно: Аудит безопасности настроек (Cisco 4500X)', 'annual-4500x-security-audit', this)">Отметить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="switch-cisco-2960" class="task-category">
+                <h4>Cisco Catalyst 2960 Plus Series</h4>
+                <div class="tasks">
+                     <div class="task-item">
+                        <label for="daily-2960-monitoring">
+                            Ежедневно: Основные проверки статусов портов
+                            <span class="task_description">Проверки статусов портов, индикаторов Link/Act; статус питания PoE-портов (если используются).</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежедневно: Основные проверки статусов портов (Cisco 2960)', 'daily-2960-monitoring', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="weekly-2960-logs">
+                            Еженедельно: Проверка логов
+                            <span class="task_description">Сообщения об ошибках портов (CRC, input/output errors), err-disabled; DHCP snooping (если настроен).</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Еженедельно: Проверка логов (Cisco 2960)', 'weekly-2960-logs', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="monthly-2960-backup">
+                            Ежемесячно: Резервное копирование конфигурации
+                            <span class="task_description">Сохранение startup-config.</span>
+                        </label>
+                        <div class="task-actions">
+                             <button onclick="logTask('Ежемесячно: Резервное копирование конфигурации (Cisco 2960)', 'monthly-2960-backup', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="monthly-2960-utilization">
+                            Ежемесячно: Анализ загрузки процессора (CPU) и памяти (Memory)
+                            <span class="task_description">Отслеживание аномальных всплесков, тенденций, оценка производительности.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежемесячно: Анализ загрузки CPU/Memory (Cisco 2960)', 'monthly-2960-utilization', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="monthly-2960-cleaning">
+                            Ежемесячно: Очистка корпуса от пыли (при необходимости)
+                            <span class="task_description">Продувка вентиляционных отверстий, проверка чистоты фильтров.</span>
+                        </label>
+                        <div class="task-actions">
+                             <button onclick="logTask('Ежемесячно: Очистка корпуса от пыли (Cisco 2960)', 'monthly-2960-cleaning', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="quarterly-2960-traffic">
+                            Ежеквартально: Анализ статистики трафика
+                            <span class="task_description">Анализ трафика на портах серверов, Wi-Fi точек доступа, uplink-портах.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежеквартально: Анализ статистики трафика (Cisco 2960)', 'quarterly-2960-traffic', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="annual-2960-full-check">
+                            Ежегодно: Полная проверка работоспособности всех функций
+                            <span class="task_description">Тестирование всех основных функций, проверка стабильности работы, отсутствие сообщений об ошибках в логах.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежегодно: Полная проверка работоспособности (Cisco 2960)', 'annual-2960-full-check', this)">Отметить</button>
+                        </div>
+                    </div>
+                    <div class="task-item">
+                        <label for="annual-2960-security-audit">
+                            Ежегодно: Аудит безопасности настроек
+                            <span class="task_description">Проверка VLANs, назначение портов VLAN, SSH, Port Security, STP.</span>
+                        </label>
+                        <div class="task-actions">
+                            <button onclick="logTask('Ежегодно: Аудит безопасности настроек (Cisco 2960)', 'annual-2960-security-audit', this)">Отметить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="ip-addresses">
+                <h2>Таблица IP-адресов</h2>
+                <table class="ip-table">
+                    <thead>
+                        <tr>
+                            <th>Устройство</th>
+                            <th>IP-адрес</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Администрация</td>
+                            <td>10.131.13.5</td>
+                        </tr>
+                        <tr>
+                            <td>Касса1</td>
+                            <td>10.131.13.1</td>
+                        </tr>
+                        <tr>
+                            <td>Касса2</td>
+                            <td>10.131.13.2</td>
+                        </tr>
+                        <tr>
+                            <td>Касса3</td>
+                            <td>10.131.13.3</td>
+                        </tr>
+                        <tr>
+                            <td>Для приёма товаров</td>
+                            <td>10.131.13.4</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section" id="network-map">
+                <h2>Схема сети</h2>
+                <div class="network-map">
+                    <img src="network-map.png" alt="Схема сети">
+                </div>
+            </div>
+
+            <div class="section" id="monitoring-thresholds">
+                <h2>Пороги мониторинга (Примерные)</h2>
+                <p><em>Данные пороги являются ориентировочными и могут потребовать корректировки в зависимости от специфики работы сети.</em></p>
+                <table class="monitoring-thresholds-table">
+                    <thead>
+                        <tr>
+                            <th>Параметр</th>
+                            <th>Порог срабатывания (Предупреждение)</th>
+                            <th>Порог срабатывания (Критический)</th>
+                            <th>Единица измерения</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Загрузка CPU</td>
+                            <td>70%</td>
+                            <td>90%</td>
+                            <td>%</td>
+                        </tr>
+                        <tr>
+                            <td>Использование памяти</td>
+                            <td>80%</td>
+                            <td>95%</td>
+                            <td>%</td>
+                        </tr>
+                        <tr>
+                            <td>Пинг до ключевых узлов</td>
+                            <td>> 100 мс</td>
+                            <td>> 300 мс</td>
+                            <td>мс</td>
+                        </tr>
+                        <tr>
+                            <td>Потери пакетов</td>
+                            <td>> 1%</td>
+                            <td>> 5%</td>
+                            <td>%</td>
+                        </tr>
+                        <tr>
+                            <td>Температура устройства</td>
+                            <td>+55°C</td>
+                            <td>+70°C</td>
+                            <td>°C</td>
+                        </tr>
+                        <tr>
+                            <td>Состояние интерфейса</td>
+                            <td>Interface down</td>
+                            <td>Interface down (более 5 минут)</td>
+                            <td>Статус</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="admin-section">
+            <h2>Журнал работ администратора</h2>
+            <div id="admin-entry">
+                <input type="text" id="adminName" placeholder="Введите имя администратора" required>
+                <button onclick="addLogEntry()">Добавить запись</button>
+                <button onclick="clearLogEntries()">Удалить все записи</button>
+            </div>
+            <div id="log-entries">
+                <!-- Записи журнала будут добавляться сюда -->
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 Все права защищены. ООО "ЭРКАФАРМ Нева" Аптека "Озерки"</p>
+    </footer>
+
+    <script>
+        const logEntriesDiv = document.getElementById('log-entries');
+        const adminNameInput = document.getElementById('adminName');
+        const searchInput = document.getElementById('searchInput');
+
+        // Загрузка записей из localStorage при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedEntries = localStorage.getItem('adminLogEntries');
+            if (savedEntries) {
+                logEntriesDiv.innerHTML = savedEntries;
+            }
+            const savedAdminName = localStorage.getItem('adminName');
+            if (savedAdminName) {
+                adminNameInput.value = savedAdminName;
+            }
+             // Раскрытие секций чек-листов при загрузке, чтобы они были видны
+            document.querySelectorAll('.task-category h4').forEach(header => {
+                const tasksContainer = header.nextElementSibling;
+                if (tasksContainer && tasksContainer.classList.contains('tasks')) {
+                    tasksContainer.classList.add('visible');
+                }
+                 header.classList.add('visible'); // Отмечаем, что секция раскрыта
+            });
+
+        });
+
+        // Функция для логирования выполненных работ
+        function logTask(taskDescription, taskId, buttonElement) {
+            const adminName = adminNameInput.value.trim();
+            if (!adminName) {
+                alert('Пожалуйста, введите имя администратора.');
+                return;
+            }
+
+            const now = new Date();
+            const timestamp = now.toLocaleString('ru-RU');
+
+            const logEntry = document.createElement('div');
+            logEntry.classList.add('log-entry');
+            logEntry.innerHTML = `
+                <p><strong>${timestamp}</strong></p>
+                <p><strong>Администратор:</strong> ${adminName}</p>
+                <p><strong>Выполненная работа:</strong> ${taskDescription}</p>
+            `;
+
+            logEntriesDiv.appendChild(logEntry);
+            buttonElement.disabled = true; // Делаем кнопку неактивной после выполнения
+            buttonElement.textContent = 'Выполнено';
+
+            saveLogEntries(); // Сохраняем после добавления
+        }
+
+        function addLogEntry() {
+            const adminName = adminNameInput.value.trim();
+            if (!adminName) {
+                alert('Пожалуйста, введите имя администратора.');
+                return;
+            }
+
+            const now = new Date();
+            const timestamp = now.toLocaleString('ru-RU');
+
+            const logEntry = document.createElement('div');
+            logEntry.classList.add('log-entry');
+            logEntry.innerHTML = `
+                <p><strong>${timestamp}</strong></p>
+                <p><strong>Администратор:</strong> ${adminName}</p>
+                <p><strong>Запись в журнале:</strong> <span contenteditable="true" style="color: #ccc; border-bottom: 1px dashed #6a0dad; cursor: text;">Введите текст записи...</span></p>
+            `;
+            logEntriesDiv.appendChild(logEntry);
+
+
+            // Делаем добавленные чекбоксы неактивными и изменяем текст кнопки, чтобы показать, что работа выполнена (если она была отмечена)
+            document.querySelectorAll('.task-actions button').forEach(button => {
+                if (!button.disabled) {
+                     // Здесь можно добавить логику, чтобы отметить только те задачи, которые реальнобыли отмечены.
+                     // Пока просто пройдемся по всем кнопкам
+                }
+            });
+
+            saveLogEntries();
+        }
+
+        // Функция для удаления всех записей
+        function clearLogEntries() {
+            if (confirm('Вы уверены, что хотите удалить все записи из журнала?')) {
+                logEntriesDiv.innerHTML = '';
+                localStorage.removeItem('adminLogEntries');
+                 // Сбрасываем состояние кнопок выполнения задач
+                document.querySelectorAll('.task-actions button').forEach(button => {
+                    button.disabled = false;
+                    button.textContent = 'Отметить';
+                });
+            }
+        }
+
+        // Функция для сохранения записей в localStorage
+        function saveLogEntries() {
+            localStorage.setItem('adminLogEntries', logEntriesDiv.innerHTML);
+            localStorage.setItem('adminName', adminNameInput.value.trim());
+        }
+
+        // Обработка поиска
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const sections = document.querySelectorAll('.section, .task-category'); // Добавляем task-category для поиска по задачам
+
+            sections.forEach(section => {
+                const sectionText = section.textContent.toLowerCase();
+                if (sectionText.includes(searchTerm)) {
+                    section.style.display = ''; // Показываем раздел, если он соответствует
+                } else {
+                    section.style.display = 'none'; // Скрываем, если не соответствует
+                }
+            });
+
+            // Если поисковый запрос пуст, показываем все разделы
+            if (searchTerm === '') {
+                document.querySelectorAll('.section, .task-category').forEach(el => el.style.display = '');
+            }
+        });
+
+        // Меняем стиль при наведении на чекбоксы
+        const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const label = checkbox.parentElement;
+                if (checkbox.checked) {
+                    label.style.color = '#dda0dd';
+                    label.style.fontWeight = 'bold';
+                } else {
+                    label.style.color = '#e0e0e0';
+                    label.style.fontWeight = 'normal';
+                }
+            });
+        });
+
+         // Обработка раскрытия/скрытия задач
+        document.querySelectorAll('.task-category > h4').forEach(header => {
+            header.addEventListener('click', () => {
+                const tasksContainer = header.nextElementSibling;
+                if (tasksContainer && tasksContainer.classList.contains('tasks')) {
+                    tasksContainer.classList.toggle('visible');
+                    header.classList.toggle('visible'); // Добавляем/удаляем класс для визуального индикатора
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
